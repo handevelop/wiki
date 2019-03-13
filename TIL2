@@ -1,0 +1,100 @@
+오류 처리
+
+# 예외 처리를 사용하라.
+if - else 로 else 에서 호출자에게 logger.log("Error occur."); 같이 오류 코드를 반환 하기보다
+오류가 나면 예외를 던지는 코드로 작성해야 가독성도 오르고 메소드의 행위와 오류 처리 알고리즘을 분리 할 수 있다.
+
+ex)
+sendShudDown() {
+	try{
+		tryToShutDown();
+	} catch (DeviceShutDownError e) {
+		logger.log(e);
+	}
+}
+tryToShutDown() throws DeviceShutDownError {
+	DeviceHandle handle = getHandle(DEV1);
+}
+getHandle(DeviceID id) {
+	throw new DeviceShutDownError("Invalid handle for : " + id.toString());
+}
+
+# Try-Catch-Finally 문부터 작성하라.
+try 블록에 들어가는 코드를 실행하면 어느 시점에서든 실행이 중단된 후 catch 블록으로 넘어갈 수 있다.
+그러므로 예외가 발생할 코드를 작성할 때에는(예외 처리를 사용할 때) try-catch-finally 문으로 시작한다.
+
+# 미확인 예외를 사용하라.
+메소드에서 확인된 예외를 던졌는데 catch 블록이 세 단계 위에 있다면 그 사이에 있는 메소드 모두가 
+선언부에 해당 예외를 정의해야 한다. 즉, 최하위 함수에서 작업을 해서 새로운 오류를 던진다면 최상위 함수까지
+모든 함수에서 1)catch 블록에서 새로운 예외를 처리하거나 2)선언부에 throw 절을 추가해야 한다.
+연쇄적인 수정이 일어나는 것은 물론이고 최하위 함수에서 던지는 예외를 알아야 하므로 캡슐화가 깨진다.
+
+# 예외에 의미를 제공하라.
+자바에서 모든 예외에 호출 스택을 제공하지만 오류 메시지에 정보를 담아서 예외와 함께 던지는게 좋다.
+실패한 연산 이름과 실패 유형도 언급한다면 금상첨화.
+
+# 호출자를 고려해 예외 클래스를 정의하라.
+외부 API를 사용할 때 감싸기 기법을 통해 외부 라이브러리와 프로그램 사이의 의존성을 크게 줄일 수 있다.
+외부 API를 감싼 클래스에서 예외를 처리하면 프로그램이 훨씬 깨끗해지며 코드가 간결해진다.
+또한 API가 설계한 방식에 발목이 잡히지 않는다. 
+
+ex)
+public class LocalPort {
+	private ACMEPort innerPort;
+	. . .
+	public void open() {
+		try {
+			innerPort.open();
+		} catch (DeviceResponseException e) {
+			throw new PortDeviceFailure(e);
+		} . . .
+	}
+. . .
+}
+
+# 정상 흐름을 정의하라.
+아래와 같은 특수 사례 패턴을 적용할 수 있는지 파악하고 예외적인 상황을 처리할 필요가 없다면 캡슐화하자.
+
+ex)
+AS-IS
+try {
+	MealExpenses expenses = expenseReportDAO.getMeals(employee.getID());
+	m_total += expenses.getTotal();
+} catch (MealExpensesNotFound e) {
+	m_total += getMealPerDiem();
+}
+TO-BE
+MealExpenses expenses = expenseReportDAO.getMeals(employee.getID());
+m_total += expenses.getTotal();
+
+public class PerDiemMealExpenses implements MealExpenses {
+	public int getTotal() {
+		// 기본값으로 일일 기본 식비를 반환한다.
+	}
+}
+
+# null을 반환하지 마라.
+지나친 null 체크는 가독성을 떨어뜨린다. 특수 사례 객체를 반환하여 이를 해결해보자.
+
+ex)
+AS-IS
+List<Employee> employees = getEmployees();
+if(employees != null){
+	for(Employee e : employees) {
+		totalPay += e.getPay();
+	}
+}
+TO-BE
+List<Employee> employees = getEmployees();
+for(Employee e : employees) {
+	totalPay += e.getPay();
+}
+
+public List<Employee> getEmployees() {
+	if(직원이 없다면) {
+		return Collections.emptyList();
+	}
+}
+
+# null을 전달하지 마라.
+메소드에서 null을 반환하는 방식도 나쁘지만 메소드로 null을 전달하는 방식은 최악이다. 이런 코드는 최대한 피해야한다.
