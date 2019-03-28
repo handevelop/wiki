@@ -18,6 +18,24 @@ System.out.println(sdf.format(now));
 public Date parse(String text, ParsePosition pos)
 String을 Date 형식으로 파싱해주는 메소드.
 이 메소드는 지정된 pos 부터 text 를 파싱한다.
+
 *이 메소드를 사용할 때 주의할 사항이 있다.
-textg가 20190329 같이 Date 꼴이 아닌 영문자, 특수문자 같은 String 이 포함되어 있으면 Parse Exception 이 발생한다.
-따라서 WAS Exception 을 방지하기 위해 try-catch 로 예외처리를 해주거나 사전에 text 에서 숫자를 제외한 나머지를 제거해주는 선작업이 필요하다.
+text와 SimpleDateFormat 객체의 꼴이 다를 경우에 ParseException 이 발생한다.
+따라서 미리 포맷과 text 를 맞추어야 하며 parse 메소드는 try-catch 문으로 예외처리를 시켜줘서
+WAS Exception 을 방지해야 한다.
+
+ex)
+String date="20150101";
+SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+format.parse(date)
+
+결과 : java.text.ParseException: Unparseable date: "20150101"
+
+해결 : 
+String date="20150101";
+SimpleDateFormat format = new SimpleDateFormat("yyyyMMdd");
+try {
+  System.out.println(format.parse(date));
+} catch (Exception ex) {
+}
+
