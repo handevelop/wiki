@@ -1,0 +1,232 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:ev="http://www.w3.org/2001/xml-events"
+    xmlns:w2="http://www.inswave.com/websquare" xmlns:xf="http://www.w3.org/2002/xforms">
+    <head>
+         <style type="text/css">
+     @media only screen and (max-width: 800px) {
+  #testInput {
+    display:none;
+  }
+}
+     </style>
+    	<w2:type>DEFAULT</w2:type>
+        <w2:buildDate/>
+        <xf:model>
+        	<xf:instance>
+        		<data xmlns="" />
+        	</xf:instance>
+        	<w2:dataCollection baseNode="map">
+        		<w2:dataList baseNode="list" repeatNode="map" id="dataList1" saveRemovedData="true">
+        			<w2:columnInfo>
+        				<w2:column id="checkBox" name="체크박스" dataType="text"></w2:column>
+        				<w2:column id="siteNo" name="사이트번호" dataType="number"></w2:column>
+        				<w2:column id="siteNm" name="사이트명" dataType="text"></w2:column>
+        				<w2:column id="entrContrNo" name="거래처계약번호" dataType="number"></w2:column>
+        				<w2:column id="entrContrNm" name="거래처명" dataType="text"></w2:column><w2:column id="startDate" name="거래시작일" dataType="text"></w2:column>
+        				<w2:column id="endDate" name="거래종료일" dataType="text"></w2:column>
+        				
+        				
+        			<w2:column id="useYn" name="거래여부" dataType="text"></w2:column></w2:columnInfo>
+        		</w2:dataList>
+        		<w2:dataMap baseNode="map" id="dbsearch">
+        			<w2:keyInfo>
+        				<w2:key id="id_input" name="id_input" dataType="text"></w2:key>
+        				<w2:key id="id_gubun" name="id_gubun" dataType="text"></w2:key>
+        				<w2:key id="id_useYn" name="id_useYn" dataType="text"></w2:key>
+        			</w2:keyInfo>
+        			<w2:data use="true"></w2:data>
+        		</w2:dataMap>
+        	</w2:dataCollection>
+        	<w2:workflowCollection></w2:workflowCollection>
+        	<xf:submission id="submission1" ref="data:json,dbsearch" target="data:json,dataList1" action="/site/search" method="post"
+        		mediatype="application/json" encoding="UTF-8" instance="" replace="" errorHandler="" customHandler="" mode="asynchronous"
+        		processMsg="조회 중..." ev:submit="scwin.submission1_submit" ev:submitdone="scwin.submission1_submitdone" ev:submiterror=""
+        		abortTrigger="">
+        	</xf:submission>
+        	<xf:submission id="submission2" ref="" target="data:json,dataList1" action="/site/all_search" method="post"
+        		mediatype="application/json" encoding="UTF-8" instance="" replace="" errorHandler="" customHandler="" mode="asynchronous"
+        		processMsg="조회 중..." ev:submit="" ev:submitdone="" ev:submiterror="" aboutTrigger="">
+        	</xf:submission>
+        	<xf:submission id="submission3" ref="data:json,dataList1" target="data:json,dataList1" action="/site/update" method="post"
+        		mediatype="application/json" encoding="UTF-8" instance="" replace="" errorHandler="" customHandler="" mode="asynchronous"
+        		processMsg="" ev:submit="" ev:submitdone="" ev:submiterror="" aboutTrigger="" abortTrigger="">
+        	</xf:submission>
+        </xf:model>
+        <script type="text/javascript" lazy="false"><![CDATA[
+
+	scwin.search_onclick = function(e) {
+	//submission 실행
+		$p.executeSubmission("submission1");
+	};
+	scwin.all_search_onclick = function(e) {
+	//submission 실행
+		$p.executeSubmission("submission2");
+	};
+	scwin.update_onclick = function(e) {
+	//submission 실행
+		var result = $p.executeSerial(["submission3"],"수정 중입니다.",function(){alert("수정 되었습니다.");}, function(){alert("수정 실패");}); 
+	};
+
+]]></script>
+    </head>
+    <body ev:onpageload="edu.onpageload" ev:onpageunload="edu.onpageunload">
+    	
+    	<w2:tabControl useTabKeyOnly="true" id="" useMoveNextTabFocus="false" useConfirmMessage="false" confirmTrueAction="exist"
+    		confirmFalseAction="new" alwaysDraw="false" style="height:600px;margin:3px;" adaptive="" adaptiveThreshold="">
+    		<w2:tabs label="사이트관리" disabled="false" style="width:100px;height:30px;" id="tabs1" tabWidth="100"></w2:tabs>
+    		<w2:content alwaysDraw="false" style="height:500px;margin: 10px;" id="content1">
+    			<xf:group style="text-align: center;height:490px;width:850px;border: solid 2px black;padding-left:10px;" id="" class="">
+    				<w2:span label="사이트 관리" style="font-size: 40px;font-" id=""></w2:span>
+    				<header style="width: 99%;height:0.1px;border:solid 2px black;magin-left:0.3px;" id=""></header>
+    				<xf:group style="//display: inline-table;//border:solid 1px grey;height:70px;margin : 3px;" id="" class="">
+    					<xf:group style="height:30px;" id="" class="">
+    						<xf:group style="width:400px;float:left;" id="" class="">
+    							<w2:span label="구분" style="font-size:15px;margin-right:3px;float:left;" id=""></w2:span>
+    							<xf:select1 submenuSize="auto" allOption="" optionOrder="false" disabled="false" id="" direction="auto"
+    								chooseOption="" displayMode="label" appearance="minimal" disabledClass="w2selectbox_disabled"
+    								style="width: 148px;height: 21px;float:left;" ref="data:dbsearch.id_gubun">
+    								<xf:choices>
+    									<xf:item>
+    										<xf:label><![CDATA[사이트명]]></xf:label>
+    										<xf:value><![CDATA[사이트명]]></xf:value>
+    									</xf:item>
+    									<xf:item>
+    										<xf:label><![CDATA[사이트번호]]></xf:label>
+    										<xf:value><![CDATA[사이트번호]]></xf:value>
+    									</xf:item>
+    									<xf:item>
+    										<xf:label><![CDATA[거래처계약번호]]></xf:label>
+    										<xf:value><![CDATA[거래처계약번호]]></xf:value>
+    									</xf:item>
+    									<xf:item>
+    										<xf:label><![CDATA[거래처명]]></xf:label>
+    										<xf:value><![CDATA[거래처명]]></xf:value>
+    									</xf:item>
+    								</xf:choices>
+    							</xf:select1>
+    							<xf:input adjustMaxLength="false" id="inputCondition" style="width: 144px;height: 21px;margin-left:5px;"
+    								ref="data:dbsearch.id_input">
+    							</xf:input>
+    						</xf:group>
+    					</xf:group>
+    					<xf:group style="height: 25px;float :left;" id="testInput" class="">
+    						<w2:span label="거래여부" style="font-size:15px;margin-right:3px;" id=""></w2:span>
+    						<xf:select1 id="" chooseOption="" displayMode="label" style="width: 148px;height: 21px;" submenuSize="auto"
+    							allOption="" disabled="false" direction="auto" appearance="minimal" disabledClass="w2selectbox_disabled"
+    							ref="data:dbsearch.id_useYn">
+    							<xf:choices>
+    								<xf:item>
+    									<xf:label><![CDATA[전체]]></xf:label>
+    									<xf:value><![CDATA[전체]]></xf:value>
+    								</xf:item>
+    								<xf:item>
+    									<xf:label><![CDATA[거래중]]></xf:label>
+    									<xf:value><![CDATA[거래중]]></xf:value>
+    								</xf:item>
+    								<xf:item>
+    									<xf:label><![CDATA[종료]]></xf:label>
+    									<xf:value><![CDATA[종료]]></xf:value>
+    								</xf:item>
+    							</xf:choices>
+    						</xf:select1>
+    					</xf:group>
+
+    					<xf:group style="float:right;width:347px;" id="" class="">
+    						<xf:trigger type="button" style="width: 80px;height: 23px;" id="search" ev:onclick="scwin.search_onclick">
+    							<xf:label><![CDATA[조회]]></xf:label>
+    						</xf:trigger>
+    						<xf:trigger ev:onclick="scwin.all_search_onclick" id="all_search" style="width: 80px;height: 23px;"
+    							type="button">
+    							<xf:label><![CDATA[전체조회]]></xf:label>
+    						</xf:trigger>
+    					</xf:group>
+
+    				</xf:group>
+    				<xf:group style="height: 50px;" id="" class="">
+    					<xf:group class="" id="" style="float:right;width:182px;">
+    						<xf:trigger ev:onclick="scwin.update_onclick" id="update_onclick" style="width: 80px;height: 23px;" type="button">
+    							<xf:label><![CDATA[수정]]></xf:label>
+    						</xf:trigger>
+    					</xf:group>
+    				</xf:group>
+    				<w2:gridView id="gridView1"
+    					style="text-align: center;height:290px;margin:3px;border:solid 1px black;left:-6px;top:-5px;" scrollByColumn=""
+    					defaultCellHeight="20" scrollByColumnAdaptive="false" dataList="data:dataList1" autoFit="allColumn" fixedColumnWithHidden=""
+    					adaptive="" noResultMessage='"No DataList"' ev:oncellclick="scwin.gridView1_oncellclick" arrowMove="" sortable="true"
+    					sortEvent="onclick" loadCount="1" ev:onscrollend="scwin.gridView1_onscrollend" rowStatusVisible="" rowStatusWidth=""
+    					ev:oncelldblclick="scwin.gridView1_oncelldblclick">
+    					<w2:caption style="" id="caption1" value="this is a grid caption."></w2:caption>
+    					<w2:header style="" id="header1">
+    						<w2:row style="" id="row1">
+    							<w2:column removeBorderStyle="false" width="70" inputType="text" id="column1" value="체크박스"
+    								blockSelect="false" displayMode="label">
+    							</w2:column>
+    							<w2:column removeBorderStyle="false" width="100" inputType="text" id="column2" value="사이트번호"
+    								blockSelect="false" displayMode="label">
+    							</w2:column>
+    							<w2:column removeBorderStyle="false" width="100" inputType="text" id="column3" value="사이트명"
+    								blockSelect="false" displayMode="label">
+    							</w2:column>
+    							<w2:column removeBorderStyle="false" width="70" inputType="text" id="column4" value="거래처계약번호"
+    								blockSelect="false" displayMode="label">
+    							</w2:column>
+    							<w2:column removeBorderStyle="false" width="70" inputType="text" id="column5" value="거래처명"
+    								blockSelect="false" displayMode="label">
+    							</w2:column>
+    							<w2:column removeBorderStyle="false" width="70" inputType="text" id="column6" value="거래시작일"
+    								blockSelect="false" displayMode="label">
+    							</w2:column>
+    							<w2:column removeBorderStyle="false" width="70" inputType="text" id="column7" value="거래종료일"
+    								blockSelect="false" displayMode="label">
+    							</w2:column>
+    							<w2:column removeBorderStyle="false" width="70" inputType="text" id="column8" value="거래여부"
+    								blockSelect="false" displayMode="label">
+    							</w2:column>
+
+    						</w2:row>
+    					</w2:header>
+    					<w2:gBody style="" id="gBody1">
+    						<w2:row style="" id="row2">
+    							<w2:column removeBorderStyle="false" width="70" inputType="checkbox" id="checkBox" blockSelect="false"
+    								displayMode="label" valueType="boolean">
+    							</w2:column>
+    							<w2:column removeBorderStyle="false" width="70" inputType="link" id="siteNo" blockSelect="true"
+    								displayMode="label" disabled="true">
+    							</w2:column>
+    							<w2:column removeBorderStyle="false" width="70" inputType="text" id="siteNm" blockSelect="false"
+    								displayMode="label">
+    							</w2:column>
+    							<w2:column removeBorderStyle="false" width="70" inputType="text" id="entrContrNo" blockSelect="false"
+    								displayMode="label">
+    							</w2:column>
+    							<w2:column removeBorderStyle="false" width="100" inputType="text" id="entrContrNm" blockSelect="false"
+    								displayMode="label">
+    							</w2:column>
+    							<w2:column removeBorderStyle="false" width="70" inputType="calendar" id="startDate" blockSelect="false"
+    								displayMode="label">
+    							</w2:column>
+    							<w2:column removeBorderStyle="false" width="70" inputType="calendar" id="endDate" blockSelect="false"
+    								displayMode="label">
+    							</w2:column>
+    							<w2:column removeBorderStyle="false" width="70" inputType="select" id="useYn" blockSelect="false"
+    								displayMode="label" allOption="" chooseOption="" ref="">
+    								<w2:choices>
+    									<w2:item>
+    										<w2:label><![CDATA[거래중]]></w2:label>
+    										<w2:value><![CDATA[Y]]></w2:value>
+    									</w2:item>
+    									<w2:item>
+    										<w2:label><![CDATA[종료]]></w2:label>
+    										<w2:value><![CDATA[N]]></w2:value>
+    									</w2:item>
+    								</w2:choices>
+    							</w2:column>
+    						</w2:row>
+    					</w2:gBody>
+    				</w2:gridView>
+    			</xf:group>
+    		</w2:content>
+    	</w2:tabControl>
+    </body>
+</html>
