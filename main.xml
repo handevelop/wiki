@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:ev="http://www.w3.org/2001/xml-events"
+    xmlns:w2="http://www.inswave.com/websquare" xmlns:xf="http://www.w3.org/2002/xforms">
+    <head>
+       <!-- Style -->
+
+<style type="text/css">
+  <![CDATA[
+  .w2trigger {
+    //				display: inline-block;
+    width: 67px;
+    height: 25px;
+    padding: 0;
+    margin: -12px 5px 0;
+    background: url(/websquare5/common/images/create/btn_bottom.gif) no-repeat;
+    //				line-height: normal;
+    //				text-align: center;
+    //				color: #fff;
+    //				border: 0;
+    //				vertical-align: middle;
+    //				overflow: visible;
+    //				cusor:pointer;			
+
+  }
+  ]]>
+</style>
+    	
+<script type="javascript">
+  <![CDATA[
+  // tab 생성 함수.
+  function addTab(tabLabel, tabId) {
+    var path = "/ui/sample/";
+
+
+    var tabOptions = {
+      label: tabLabel,
+      closable: "true",
+      openAction: "exist"
+    };
+    var contentsOptions = {
+      frameMode: "iframe",
+      src: path + tabLabel +".xml"
+    };
+    var ret = tabControl1.addTab(tabId, tabOptions, contentsOptions);
+
+    if (ret) {
+      var tabidx = tabControl1.getTabIndex(tabId);
+      tabControl1.setSelectedTabIndex(tabidx);
+    }
+  }
+  ]]>
+</script>
+    </head>
+    <body ev:onpageload="edu.onpageload" ev:onpageunload="edu.onpageunload">
+    	<xf:group id="group4" style="position:relative;width:550px;height:25px;margin-top:20px;">
+  <xf:trigger id="trigger2" style="" type="button">
+    <xf:label>
+      <![CDATA[사이트 관리]]>
+    </xf:label>
+    <script ev:event="onclick" type="javascript">
+      <![CDATA[
+      addTab("siteManage", "TAB1");
+      ]]>
+    </script>
+  </xf:trigger>
+  <xf:trigger id="trigger4" style="" type="button">
+    <xf:label>
+      <![CDATA[재고 관리]]>
+    </xf:label>
+    <script ev:event="onclick" type="javascript">
+      <![CDATA[
+      addTab("StockSearch", "TAB2");
+      ]]>
+    </script>
+  </xf:trigger>
+</xf:group>
+    	<w2:textbox class="titlebox" id="textbox1" label="" style="" />
+<w2:tabControl confirmTrueAction="exist" useTabKeyOnly="true" id="tabControl1" spaInitCount="3" style="position: relative ;width: 900px;height: 600px;" useConfirmMessage="false" confirmFalseAction="new" alwaysDraw="true" confirmMessage="중복" windowMaxNum="6"></w2:tabControl>
+
+    </body>
+</html>
