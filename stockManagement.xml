@@ -1,0 +1,367 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:ev="http://www.w3.org/2001/xml-events"
+    xmlns:w2="http://www.inswave.com/websquare" xmlns:xf="http://www.w3.org/2002/xforms">
+    <head>
+         <style type="text/css">
+     @media only screen and (max-width: 800px) {
+  #testInput {
+    display:none;
+  }
+}
+     </style>
+    	<w2:type>DEFAULT</w2:type>
+        <w2:buildDate/>
+        <xf:model>
+        	<xf:instance>
+        		<data xmlns="" />
+        	</xf:instance>
+        	<w2:dataCollection baseNode="map">
+        		<w2:dataList baseNode="list" repeatNode="map" id="dataList1" saveRemovedData="true">
+        			<w2:columnInfo>
+        				<w2:column id="itemNo" name="No." dataType="text"></w2:column>
+        				<w2:column id="whenInsert" name="Date" dataType="text"></w2:column>
+        				<w2:column id="itemName" name="Name" dataType="text"></w2:column>
+        				<w2:column id="stockCount" name="Count" dataType="number"></w2:column>
+        				<w2:column id="type" name="Type" dataType="text"></w2:column>
+        				<w2:column id="url" name="Url" dataType="text"></w2:column>
+        			</w2:columnInfo>
+        		</w2:dataList>
+        		<w2:dataMap baseNode="map" id="dbsearch">
+        			<w2:keyInfo>
+        				<w2:key id="id_input" name="name1" dataType="text"></w2:key>
+        				<w2:key id="id_if" name="name2" dataType="text"></w2:key>
+        				<w2:key id="id_buy" name="name3" dataType="text"></w2:key>
+        			</w2:keyInfo>
+        		</w2:dataMap>
+        		<w2:dataList baseNode="list" repeatNode="map" id="dataList2" saveRemovedData="true">
+        			<w2:columnInfo>
+        				<w2:column id="itemNo" name="No." dataType="text"></w2:column>
+        				<w2:column id="whenInsert" name="Date" dataType="text"></w2:column>
+        				<w2:column id="itemName" name="상품명" dataType="text"></w2:column>
+        				<w2:column id="stockCount" name="Count" dataType="number"></w2:column>
+        				<w2:column id="type" name="Type" dataType="text"></w2:column>
+        				<w2:column id="url" name=" Url" dataType="text"></w2:column>
+        			</w2:columnInfo>
+        		</w2:dataList>
+        		<w2:dataMap baseNode="map" id="dbsearch2">
+        			<w2:keyInfo>
+        				<w2:key id="id_itemname" name="name1" dataType="text"></w2:key>
+        				<w2:key id="id_itemnum" name="name2" dataType="text"></w2:key>
+        			</w2:keyInfo>
+        		</w2:dataMap>
+        		<w2:dataMap baseNode="map" id="stockDataChanged">
+        			<w2:keyInfo>
+        				<w2:key id="id_inputvalue" name="name1" dataType="number"></w2:key>
+        				<w2:key id="id_partitionkey" name="name2" dataType="text"></w2:key>
+        				<w2:key id="id_rangekey" name="name3" dataType="text"></w2:key>
+        			</w2:keyInfo>
+        		</w2:dataMap>
+        	</w2:dataCollection>
+        	<w2:workflowCollection></w2:workflowCollection>
+        	<xf:submission id="submission1" ref="data:json,dbsearch" target="data:json,dataList1" action="/stock/select" method="post"
+        		mediatype="application/json" encoding="UTF-8" instance="" replace="" errorHandler="" customHandler="" mode="asynchronous"
+        		processMsg="" ev:submit="scwin.submission1_submit" ev:submitdone="scwin.submission1_submitdone" ev:submiterror="" abortTrigger="">
+        	</xf:submission>
+        	<xf:submission id="submission2" ref="data:json,dbsearch2" target="data:json,dataList2" action="/stock/select_change"
+        		method="post" mediatype="application/json" encoding="UTF-8" instance="" replace="" errorHandler="" customHandler=""
+        		mode="asynchronous" processMsg="" ev:submit="scwin.submission2_submit" ev:submitdone="" ev:submiterror="" abortTrigger="">
+        	</xf:submission>
+        	<xf:submission id="submission3" ref="data:json,stockDataChanged" target="" action="/stock/stockChange" method="post"
+        		mediatype="application/json" encoding="UTF-8" instance="" replace="" errorHandler="" customHandler="" mode="asynchronous"
+        		processMsg="" ev:submit="" ev:submitdone="" ev:submiterror="" abortTrigger="">
+        	</xf:submission>
+        </xf:model>
+        <script type="text/javascript" lazy="false"><![CDATA[
+//    $(document).ready(function(){
+    
+//    	$p.executeSubmission("submission1");
+//    })
+//	
+
+
+	
+	
+	scwin.sj_search_onclick = function(e) {
+	//submission 실행
+		//$p.executeSubmission("submission1");
+
+		scwin.selectMemeberList(true);
+		//inputCondition.setValue( "" );
+	};
+	
+	scwin.selectMemeberList = function(isFirst){
+		//첫 페이지로 셋팅.
+		//if(isFirst == true){
+		//	dma_SearchParam.set( "page" , 1 );
+		//}
+		alert("조회.");
+		$p.executeSubmission("submission1");
+	};
+		
+	
+	//scwin.submission1_submit = function(e) {
+	//	pageChange.setValue()
+	//};
+	
+	//scwin.submission1_submitdone = function(e) {
+	//	scwin.setPageInfo();
+	//};
+	
+///////////////////////////////////////////////////
+	scwin.search_change_onclick = function(e) {
+		$p.executeSubmission("submission2");
+	};
+///////////////////////////////////////////////////	
+	scwin.trigger3_onclick = function(e) {
+		$p.executeSubmission("submission3");
+		alert("변경되었습니다.");
+		changeValue.setValue( "" );
+	};
+	 
+	scwin.gridViewChange_oncellclick = function(row,col) {
+		//var col_id = gridViewChange.getColumnID( 0);
+		
+		
+		textbox_stock.setValue(gridViewChange.getCellData(row,3));
+		stockDataChanged.set( "id_partitionkey" , dataList2.getCellData(row,0) );
+		stockDataChanged.set( "id_rangekey" , dataList2.getCellData(row,1) );
+		
+	};
+	
+
+	
+	scwin.gridView1_oncelldblclick = function(row,col) {
+		//alert("더블클릭.");
+		var url_val = gridView1.getCellData();
+		alert("url_val");
+	};
+	
+///////////////////////////////////////////////////////////////
+
+	
+	scwin.pageChange_onviewchange = function(info) {
+		
+	};
+	]]></script>
+    </head>
+    <body ev:onpageload="edu.onpageload" ev:onpageunload="edu.onpageunload">
+    	
+    	<w2:tabControl useTabKeyOnly="true" id="" useMoveNextTabFocus="false" useConfirmMessage="false" confirmTrueAction="exist"
+    		confirmFalseAction="new" alwaysDraw="false" style="height:600px;margin:3px;" adaptive="" adaptiveThreshold="">
+    		<w2:tabs label="재고조회" disabled="false" style="width:100px;height:30px;" id="tabs1" tabWidth="100"></w2:tabs>
+    		<w2:tabs disabled="false" style="width:100px;height:30px;" label="재고변경" id="tabs3" tabWidth="100"></w2:tabs>
+    		<w2:content alwaysDraw="false" style="height:500px;margin: 10px;" id="content1">
+    			<xf:group style="text-align: center;height:490px;width:850px;border: solid 2px black;padding-left:10px;" id="" class="">
+    				<w2:span label="재고 조회" style="font-size: 40px;font-" id=""></w2:span>
+    				<header style="width: 99%;height:0.1px;border:solid 2px black;magin-left:0.3px;" id=""></header>
+    				<xf:group style="//display: inline-table;//border:solid 1px grey;height:70px;margin : 3px;" id="" class="">
+    					<xf:group style="height:30px;" id="" class="">
+    						<xf:group style="width:400px;float:left;" id="" class="">
+    							<w2:span label="검색조건" style="font-size:15px;margin-right:3px;float:left;" id=""></w2:span>
+    							<xf:select1 submenuSize="auto" allOption="" optionOrder="false" disabled="false" id="" direction="auto"
+    								chooseOption="" displayMode="label" appearance="minimal" disabledClass="w2selectbox_disabled"
+    								style="width: 148px;height: 21px;float:left;" ref="data:dbsearch.id_if">
+    								<xf:choices>
+    									<xf:item>
+    										<xf:label><![CDATA[----선택----]]></xf:label>
+    										<xf:value><![CDATA[선택]]></xf:value>
+    									</xf:item>
+    									<xf:item>
+    										<xf:label><![CDATA[상품번호]]></xf:label>
+    										<xf:value><![CDATA[상품번호]]></xf:value>
+    									</xf:item>
+    									<xf:item>
+    										<xf:label><![CDATA[상품명]]></xf:label>
+    										<xf:value><![CDATA[상품명]]></xf:value>
+    									</xf:item>
+    								</xf:choices>
+    							</xf:select1>
+    							<xf:input adjustMaxLength="false" id="inputCondition" style="width: 144px;height: 21px;margin-left:5px;"
+    								ref="data:dbsearch.id_input">
+    							</xf:input>
+    						</xf:group>
+    					</xf:group>
+    					<xf:group style="height: 25px;float :left;" id="testInput" class="">
+    						<w2:span label="매입유형" style="font-size:15px;margin-right:3px;" id=""></w2:span>
+    						<xf:select1 id="" chooseOption="" displayMode="label" style="width: 148px;height: 21px;" submenuSize="auto"
+    							allOption="" disabled="false" direction="auto" appearance="minimal" disabledClass="w2selectbox_disabled"
+    							ref="data:dbsearch.id_buy">
+    							<xf:choices>
+    								<xf:item>
+    									<xf:label><![CDATA[----선택----]]></xf:label>
+    									<xf:value><![CDATA[선택]]></xf:value>
+    								</xf:item>
+    								<xf:item>
+    									<xf:label><![CDATA[직매입]]></xf:label>
+    									<xf:value><![CDATA[직매입]]></xf:value>
+    								</xf:item>
+    								<xf:item>
+    									<xf:label><![CDATA[위탁]]></xf:label>
+    									<xf:value><![CDATA[위탁]]></xf:value>
+    								</xf:item>
+    							</xf:choices>
+    						</xf:select1>
+    					</xf:group>
+
+    					<xf:group style="float:right;width:200px;" id="" class="">
+    						<xf:trigger type="button" style="width: 80px;height: 23px;" id="sj_search"
+    							ev:onclick="scwin.sj_search_onclick">
+    							<xf:label><![CDATA[조회]]></xf:label>
+    						</xf:trigger>
+    					</xf:group>
+    				</xf:group>
+    				<xf:group style="height: 50px;" id="" class=""></xf:group>
+    				<w2:gridView id="gridView1"
+    					style="text-align: center;height:290px;margin:3px;border:solid 1px black;left:-6px;top:-5px;" scrollByColumn=""
+    					defaultCellHeight="20" scrollByColumnAdaptive="false" dataList="data:dataList1" autoFit="allColumn" fixedColumnWithHidden=""
+    					adaptive="" noResultMessage='"No DataList"' ev:oncellclick="scwin.gridView1_oncellclick" arrowMove="" sortable="true"
+    					sortEvent="onclick" loadCount="1" ev:onscrollend="scwin.gridView1_onscrollend" rowStatusVisible="" rowStatusWidth=""
+    					ev:oncelldblclick="scwin.gridView1_oncelldblclick">
+    					<w2:caption style="" id="caption1" value="this is a grid caption."></w2:caption>
+    					<w2:header style="" id="header1">
+    						<w2:row style="" id="row1">
+    							<w2:column removeBorderStyle="false" width="70" inputType="text" style="" id="column11" value="No."
+    								blockSelect="false" displayMode="label">
+    							</w2:column>
+    							<w2:column removeBorderStyle="false" width="70" inputType="text" style="" id="column9" value="Date"
+    								blockSelect="false" displayMode="label">
+    							</w2:column>
+    							<w2:column removeBorderStyle="false" width="70" inputType="text" style="" id="column7" value="Name"
+    								blockSelect="false" displayMode="label">
+    							</w2:column>
+    							<w2:column removeBorderStyle="false" width="70" inputType="text" style="" id="column5" value="Count"
+    								blockSelect="false" displayMode="label">
+    							</w2:column>
+    							<w2:column removeBorderStyle="false" width="70" inputType="text" style="" id="column3" value="Type"
+    								blockSelect="false" displayMode="label">
+    							</w2:column>
+    							<w2:column removeBorderStyle="false" width="70" inputType="text" style="" id="column1" value="Url"
+    								blockSelect="false" displayMode="label">
+    							</w2:column>
+    						</w2:row>
+    					</w2:header>
+    					<w2:gBody style="" id="gBody1">
+    						<w2:row style="" id="row2">
+    							<w2:column removeBorderStyle="false" width="70" inputType="text" style="" id="itemNo" value=""
+    								blockSelect="false" displayMode="label" disabled="">
+    							</w2:column>
+    							<w2:column removeBorderStyle="false" width="70" inputType="text" style="" id="whenInsert" value=""
+    								blockSelect="false" displayMode="label">
+    							</w2:column>
+    							<w2:column removeBorderStyle="false" width="70" inputType="text" style="" id="itemName" value=""
+    								blockSelect="false" displayMode="label">
+    							</w2:column>
+    							<w2:column removeBorderStyle="false" width="70" inputType="text" style="" id="stockCount" value=""
+    								blockSelect="false" displayMode="label">
+    							</w2:column>
+    							<w2:column removeBorderStyle="false" width="70" inputType="text" style="" id="type" value=""
+    								blockSelect="false" displayMode="label">
+    							</w2:column>
+    							<w2:column removeBorderStyle="false" width="70" inputType="text" style="" id="url" value=""
+    								blockSelect="false" displayMode="label">
+    							</w2:column>
+    						</w2:row>
+    					</w2:gBody>
+    				</w2:gridView>
+    				<w2:pageList pageSize="2" id="pageChange" displayFormat="#" style="" displayButtonType="display" ev:onviewchange="scwin.pageChange_onviewchange">
+    					
+    				
+    				
+    				</w2:pageList>
+    			</xf:group>
+    		</w2:content>
+    		<w2:content alwaysDraw="false" style="height:500px;margin: 10px;" id="content3">
+    			<xf:group style="text-align: center;height:480px;width:850px;border: solid 2px black;padding-left:10px;" id="" class="">
+    				<w2:span id="" label="재고 변경" style="font-size: 40px;font-"></w2:span>
+    				<header id="" style="width: 99%;height:0.1px;border:solid 2px black;magin-left:0.3px;"></header>
+    				<xf:group class="" id="" style="//display: inline-table;//border:solid 1px grey;height:70px;margin : 3px;">
+    					<xf:group class="" id="" style="height:30px;">
+    						<xf:group class="" id="" style="height: 25px;float :left;">
+    							<w2:span id="" label="상품명" style="font-size:15px;margin-right:17px;"></w2:span>
+    							<xf:input adjustMaxLength="false" id="" style="width: 144px;height: 21px;" ref="data:dbsearch2.id_itemname"></xf:input>
+    						</xf:group>
+    					</xf:group>
+    					<xf:group class="" id="group1" style="height: 25px;float :left;">
+    						<w2:span id="" label="상품번호" style="font-size:15px;margin-right:3px;"></w2:span>
+    						<xf:input adjustMaxLength="false" id="" style="width: 144px;height: 21px;" ref="data:dbsearch2.id_itemnum"></xf:input>
+    					</xf:group>
+    					<xf:group class="" id="" style="float:right;width:200px;">
+    						<xf:trigger ev:onclick="scwin.search_change_onclick" id="search_change" style="width: 80px;height: 23px;"
+    							type="button">
+    							<xf:label><![CDATA[조회]]></xf:label>
+    						</xf:trigger>
+    					</xf:group>
+    				</xf:group>
+    				<header id="" style="width: 99%;height:0.1px;border:solid 2px black;magin-left:0.3px;"></header>
+    				<xf:group class="" id="" style="//display: inline-table;//border:solid 1px grey;margin : 3px;height:30px;">
+    					<xf:group class="" id="group3" style="width:435px;float :left;">
+    						<w2:textbox label="재고" style="width: 50px;height: 23px;float:left;font-size:15px;" id=""></w2:textbox>
+    						<w2:textbox label="" style="width: 130px;height: 18px;float:left;border: solid 1px black;" id="textbox_stock"></w2:textbox>
+    						<w2:textbox label="⟹" style="width: 50px;height: 23px;float:left;" id=""></w2:textbox>
+    						<xf:input adjustMaxLength="false" id="changeValue" style="width: 144px;height: 21px;" ref="data:stockDataChanged.id_inputvalue"></xf:input>
+    					</xf:group>
+    					<xf:group class="" id="" style="float:right;width:200px;">
+    						<xf:trigger ev:onclick="scwin.trigger3_onclick" id="trigger3" style="width: 80px;height: 23px;"
+    							type="button">
+    							<xf:label><![CDATA[변경]]></xf:label>
+    						</xf:trigger>
+    					</xf:group>
+    				</xf:group>
+    				<w2:gridView id="gridViewChange" ignoreToggleOnDisabled="false" syncScroll="false" useShiftKey="true"
+    					style="height:290px;margin:3px;border:solid 1px black;left:-6px;top:-5px;" scrollByColumn="false" defaultCellHeight="20"
+    					scrollByColumnAdaptive="false" summaryAuto="false" summaryOnlyAuto="false" applyAllColumnStyle="false" dataList="data:dataList2"
+    					ignoreCellClick="false" autoFit="allColumn" ev:oncellclick="scwin.gridViewChange_oncellclick" sortable="true" sortEvent="onclick"
+    					editModeEvent="" drilldownToggleScrollFix="" selectedRowColor="" selectedCellColor="#00FF40" rowStatusVisible=""
+    					rowStatusWidth="10" senseReader="" tooltipDisplay="true" rowNumVisible="false" rowNumBackgroundColor="#FF00FF" readOnly="true" readOnlyBackgroundColor="" evenRowBackgroundColor="#80FFFF">
+    					<w2:caption style="" id="caption1" value="this is a grid caption."></w2:caption>
+    					<w2:header style="" id="header1">
+    						<w2:row style="" id="row1">
+    							<w2:column footerDiv="false" removeBorderStyle="false" width="70" inputType="text" style="" id="column11"
+    								value="No." blockSelect="false" displayMode="label">
+    							</w2:column>
+    							<w2:column footerDiv="false" removeBorderStyle="false" width="70" inputType="text" style="" id="column9"
+    								value="Date" blockSelect="false" displayMode="label">
+    							</w2:column>
+    							<w2:column footerDiv="false" removeBorderStyle="false" width="70" inputType="text" style="" id="column7"
+    								value="상품명" blockSelect="false" displayMode="label">
+    							</w2:column>
+    							<w2:column footerDiv="false" removeBorderStyle="false" width="70" inputType="text" style="" id="column5"
+    								value="Count" blockSelect="false" displayMode="label">
+    							</w2:column>
+    							<w2:column footerDiv="false" removeBorderStyle="false" width="70" inputType="text" style="" id="column3"
+    								value="Type" blockSelect="false" displayMode="label">
+    							</w2:column>
+    							<w2:column footerDiv="false" removeBorderStyle="false" width="70" inputType="text" style="" id="column1"
+    								value=" Url" blockSelect="false" displayMode="label">
+    							</w2:column>
+    						</w2:row>
+    					</w2:header>
+    					<w2:gBody style="" id="gBody1">
+    						<w2:row style="" id="row2">
+    							<w2:column footerDiv="false" removeBorderStyle="false" width="70" inputType="text" style="" id="itemNo"
+    								value="" blockSelect="false" displayMode="label">
+    							</w2:column>
+    							<w2:column footerDiv="false" removeBorderStyle="false" width="70" inputType="text" style="" id="whenInsert"
+    								value="" blockSelect="false" displayMode="label">
+    							</w2:column>
+    							<w2:column footerDiv="false" removeBorderStyle="false" width="70" inputType="text" style="" id="itemName"
+    								value="" blockSelect="false" displayMode="label">
+    							</w2:column>
+    							<w2:column footerDiv="false" removeBorderStyle="false" width="70" inputType="text" style="" id="stockCount"
+    								value="" blockSelect="false" displayMode="label">
+    							</w2:column>
+    							<w2:column footerDiv="false" removeBorderStyle="false" width="70" inputType="text" style="" id="type"
+    								value="" blockSelect="false" displayMode="label">
+    							</w2:column>
+    							<w2:column footerDiv="false" removeBorderStyle="false" width="70" inputType="text" style="" id="url"
+    								value="" blockSelect="false" displayMode="label">
+    							</w2:column>
+    						</w2:row>
+    					</w2:gBody>
+    				</w2:gridView>
+    			</xf:group>
+    		</w2:content>
+    	</w2:tabControl>
+    </body>
+</html>
